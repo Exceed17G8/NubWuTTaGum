@@ -27,11 +27,6 @@ switch (date.getDay()) {
 document.getElementById("day").innerText = dayTH;
 document.getElementById("time").innerText = date.toLocaleString();
 
-var amount_now = document.getElementById("amount-now");
-var amount_max = document.getElementById("amount-max");
-amount_now.innerText = "5";
-amount_max.innerText = "50";
-
 setTimeout(function() {
     window.location.reload(1);
 }, 1000);
