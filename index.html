@@ -9,21 +9,22 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
 </head>
 
-<body class="position-fixed w-100 h-100 mw-100 mh-100" style="background-image: url('innovation.jpg');">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light" style="opacity: 80%;">
+<body class="position-fixed w-100 h-100 mw-100 mh-100" style="background-image: url('innovation.gif');">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" style="opacity: 72%;">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">หน้าหลัก</a>
             <button class="btn btn-outline-success" id="time" type="submit">จะเอ๋ตัวเอง!?</button>
             <button class="btn btn-outline-success" id="day" type="submit">ผมลุงแดงสอนกีตาร์</button>
         </div>
     </nav>
-    <main class="w-100 h-100 mw-100 mh-100">
+    <main class="w-100 h-100">
       <div class="bg-dark" style="opacity: 50%;">
-        <h1 class="text-primary text-center" style="opacity: 100%;">จำนวนคนในร้าน ในขณะนี้: <span id="amount-now">0</span>/<span id="amount-max">0</span></h1>
+        <h1 class="text-primary text-center" style="opacity: 100%;">จำนวนคนในร้านขณะนี้: <span id="amount-now">0</span>/<span id="amount-max">0</span></h1>
         <h2 class="text-secondary text-center" style="opacity: 100%;">จำนวนคนในร้านสะสมในวันนี้: <span id="amount-cum">0</span></h1>
       </div>
-
-      <canvas id="myChart" width="400" height="400"></canvas>
+      <div class="position-fixed w-50 h-50">
+        <canvas id="myChart"></canvas>
+      </div>
     </main>
     <script src="https://www.chartjs.org/dist/2.8.0/Chart.min.js" ></script>
     <script src="https://www.chartjs.org/samples/latest/utils.js" ></script>
