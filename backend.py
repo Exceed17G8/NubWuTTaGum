@@ -12,6 +12,7 @@ mongo = PyMongo(app)
 myCollection = mongo.db.nubwuttagum_store
 
 @app.route('/update_customer/<storeId>', methods=['POST'])
+@cross_origin
 def update_customer(storeId):
     # get status (0/1) for (in/out)
     data = request.json
@@ -61,6 +62,7 @@ def update_customer(storeId):
     return {'result': 'Updated successfully'}
 
 @app.route('/max', methods=['GET'])
+@cross_origin
 def get_max():
     query = myCollection.find_one()
     max_customer = {
@@ -69,6 +71,7 @@ def get_max():
     return max_customer
     
 @app.route('/current', methods=['GET'])
+@cross_origin
 def get_current():
     query = myCollection.find_one()
     current = {
@@ -77,6 +80,7 @@ def get_current():
     return current
 
 @app.route('/minute', methods=['GET'])
+@cross_origin
 def get_per_minute_this_hour():
     query = myCollection.find_one()
     five_minute = query["thisHourCumulativeCustomerEveryFiveMinutes"]
@@ -86,6 +90,7 @@ def get_per_minute_this_hour():
     return json.dumps(list_five)
 
 @app.route('/hour', methods=['GET'])
+@cross_origin
 def get_per_hour():
     query = myCollection.find_one()
     data = query['cumulativeCustomer']
@@ -100,6 +105,7 @@ def get_per_hour():
     return json.dumps(list_hour[0])
 
 @app.route('/day', methods=['GET'])
+@cross_origin
 def get_per_day():
     query = myCollection.find_one()
     data = query['cumulativeCustomer']
