@@ -22,11 +22,13 @@
         </div>
     </nav>
     <main class="w-100 h-100">
-      <div class="bg-dark" style="opacity: 72%;">
-        <h1 class="text-primary text-center" style="opacity: 100%;">จำนวนคนในร้านขณะนี้: <span id="amount-now">0</span>/<span id="amount-max">0</span></h1>
-        <h2 class="text-secondary text-center" style="opacity: 100%;">จำนวนคนในร้านสะสมในวันนี้: <span id="amount-cum">0</span></h1>
+      <div class="bg-dark" id="customer-status" style="opacity: 72%;">
+        <h1 class="text-light text-center">จำนวนคนในร้านขณะนี้: <span id="amount-now">0</span>/<span id="amount-max">0</span></h1>
+        <h2 class="text-light text-center"><sup>Current customer(s)</sup></h2>
+        <h2 class="text-light text-center";">จำนวนคนในร้านสะสมในวันนี้: <span id="amount-cum">0</span></h1>
+        <h3 class="text-light text-center"><sup>Today's cumulative customer(s)</sup></h3>
       </div>
-      <div class="position-fixed w-100 h-100">
+      <div class="position-fixed">
         <canvas id="myChart" style="width: 500px; height: 300px; margin: 50px;padding: 10px; border: solid 0.5px grey; background-color: whitesmoke;"></canvas>
         <canvas id="dayChart" style="width: 500px; height: 300px; margin: 50px;padding: 10px; border: solid 0.5px grey; background-color: whitesmoke;"></canvas>
       </div>
