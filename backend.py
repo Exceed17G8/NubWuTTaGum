@@ -31,21 +31,18 @@ def update_customer(storeId):
     unconverted_now = datetime.datetime.now()
     timezone = pytz.timezone("Asia/Bangkok")
     now = unconverted_now.astimezone(timezone)
-    minute = now.minute
-    currentMinuteCustomerList = query['thisHourCumulativeCustomerEveryFiveMinutes']
-    currentMinuteCustomer = query['thisHourCumulativeCustomerEveryFiveMinutes'][(minute//5)]
-    if currentMinuteCustomer == 0:
-        currentMinuteCustomer = max(currentMinuteCustomerList)
-
+    minute = now.minute  # Too tell minute for now
+    five_minutes_current_interval = minute // 5  # Current interval for data Array(size(12))
+    currentMinuteCumulativeCustomer = query['thisHourCumulativeCustomerEveryFiveMinutes'][five_minutes_current_interval]
 
     hour = now.hour
-    if(hour != query['lastHourChecked']):
+    if hour != query['lastHourChecked']:
         myCollection.update_one(filt, {'$set': {
         'thisHourCumulativeCustomerEveryFiveMinutes': [0,0,0,0,0,0,0,0,0,0,0,0],
         'lastHourChecked': hour
         }})
 
-    if (now.strftime("%x") != query['cumulativeCustomer'][-1]['timeStamp']):
+    if now.strftime("%x") != query['cumulativeCustomer'][-1]['timeStamp']:
         added_day = {'$push': {'cumulativeCustomer': {'timeStamp': now.strftime("%x"), 'cumulativeCustomerPerHour': [
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}}}
         myCollection.update_one(filt, added_day)
@@ -53,24 +50,22 @@ def update_customer(storeId):
     if hour == 25:
         hour = 0
 
-    currentHourCustomerList = query['cumulativeCustomer'][-1]["cumulativeCustomerPerHour"]
-    currentHourCustomer = query['cumulativeCustomer'][-1]["cumulativeCustomerPerHour"][hour]
-    if currentHourCustomer == 0:
-        if hour == 0:
-            currentHourCustomer = query['cumulativeCustomer'][-1]["cumulativeCustomerPerHour"][hour]
-        else:
-            currentHourCustomer = max(currentHourCustomerList)
+    currentHourCumulativeCustomer = query['cumulativeCustomer'][-1]["cumulativeCustomerPerHour"][hour]
 
-    if (statusId == 0):
+    if statusId == 0:
         currentCustomer -= 1
     else:
         currentCustomer += 1
-        currentMinuteCustomer += 1
-        currentHourCustomer += 1
+        currentMinuteCumulativeCustomer += 1
+        currentHourCumulativeCustomer += 1
+        if hour < 24:
+            query['cumulativeCustomer'][-1]["cumulativeCustomerPerHour"][hour + 1] = currentHourCumulativeCustomer
+        if five_minutes_current_interval + 1 < 11:
+            query['thisHourCumulativeCustomerEveryFiveMinutes'][five_minutes_current_interval + 1] = currentMinuteCumulativeCustomer
 
     updated_content = {'$set': {
         'currentCustomer': currentCustomer,
-        'thisHourCumulativeCustomerEveryFiveMinutes.' + str(minute//5): currentMinuteCustomer,
+        'thisHourCumulativeCustomerEveryFiveMinutes.' + str(five_minutes_current_interval): currentMinuteCumulativeCustomer,
     }}
 
     length = len(myCollection.find({'storeId': 0})[0]['cumulativeCustomer'])
@@ -80,7 +75,7 @@ def update_customer(storeId):
     myCollection.update_one(
         filt,
         {"$set": {'cumulativeCustomer.' +
-                  str(length-1) + '.cumulativeCustomerPerHour.' + str(hour-1): currentHourCustomer}}
+                  str(length-1) + '.cumulativeCustomerPerHour.' + str(hour-1): currentHourCumulativeCustomer}}
     )
 
     return {'result': 'Updated successfully'}
@@ -146,7 +141,7 @@ def get_per_day():
     del latest_date["timeStamp"]
     for i in latest_date.values():
         list_hour.append(i)
-    return json.dumps(list_hour[0][-1])
+    return json.dumps(max(list_hour[0]))  # However the cumulative is always a max value in that day
 
 @app.route('/get_predict', methods=['GET'])
 @cross_origin()
