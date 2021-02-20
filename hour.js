@@ -43,7 +43,7 @@ setInterval(function() {
   setLabels(data.labels);
 
   var myLineChart = new Chart(ctx).Line(data, options);
-}, 2000);
+}, 3600000);
 
 function setLabels(labels) {
   var nextMonthIndex = months.indexOf(labels[labels.length - 1]) + 1;

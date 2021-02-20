@@ -29,7 +29,7 @@ document.getElementById("time").innerText = date.toLocaleString();
 // http://158.108.182.9:3000/max
 $.getJSON('mockup/max.json', function(data) {
     console.log(data);
-    document.getElementById("amount-max").innerText = data["max_customer"];
+    document.getElementById("amount-max").innerText = data["maxCustomer"];
 });
 // var ctx = document.getElementById('myChart').getContext('2d');
 // var myChart = new Chart(ctx, {
