@@ -1,31 +1,31 @@
 function update() {
     var date = new Date();
 
-    var dayTH = "";
+    var day = "";
     switch (date.getDay()) {
         case 0:
-            dayTH = "วันอาทิตย์";
+            day = "SUNDAY";
             break;
         case 1:
-            dayTH = "วันจันทร์";
+            day = "MONDAY";
             break;
         case 2:
-            dayTH = "วันอังคาร";
+            day = "TUESDAY";
             break;
         case 3:
-            dayTH = "วันพุธ";
+            day = "WEDNESDAY";
             break;
         case 4:
-            dayTH = "วันพฤหัสบดี";
+            day = "THURSDAY";
             break;
         case 5:
-            dayTH = "วันศุกร์";
+            day = "FRIDAY";
             break;
         case 6:
-            dayTH = "วันเสาร์";
+            day = "SATURDAY";
             break;
     }
-    document.getElementById("day").innerText = dayTH;
+    document.getElementById("day").innerText = day;
     document.getElementById("time").innerText = date.toLocaleString();
 
     var customer = 1;

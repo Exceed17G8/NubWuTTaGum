@@ -16,16 +16,18 @@
 <body class="position-fixed w-100 h-100 mw-100 mh-100" style="background: #CCFFFF;">
     <nav class="navbar navbar-expand-lg navbar-light bg-light" style="opacity: 100%;">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/">หน้าหลัก</a>
-            <button class="btn btn-outline-success" id="time" type="submit">จะเอ๋ตัวเอง!?</button>
-            <button class="btn btn-outline-success" id="day" type="submit">ผมลุงแดงสอนกีตาร์</button>
+            <a class="navbar-brand" href="/">
+              <img src="nubwattagum.png" style="width: 50px; height: 50px;" alt="logo">
+            </a>
+            <h3 class="nav-item" id="time">จะเอ๋ตัวเอง!?</h3>
+            <h3 class="nav-item" id="day">ผมลุงแดงสอนกีตาร์</h3>
         </div>
     </nav>
     <main class="w-100 h-100">
       <div class="bg-dark" id="customer-status" style="opacity: 72%;">
         <h1 class="text-light text-center">จำนวนคนในร้านขณะนี้: <span id="amount-now">0</span>/<span id="amount-max">0</span></h1>
         <h2 class="text-light text-center"><sup>Current customer(s)</sup></h2>
-        <h2 class="text-light text-center";">จำนวนคนในร้านสะสมในวันนี้: <span id="amount-cum">0</span></h1>
+        <h2 class="text-light text-center">จำนวนคนในร้านสะสมในวันนี้: <span id="amount-cum">0</span></h1>
         <h3 class="text-light text-center"><sup>Today's cumulative customer(s)</sup></h3>
       </div>
       <div class="position-fixed">
@@ -34,6 +36,14 @@
       </div>
     </main>
     
+    <footer class="fixed-bottom">
+      <nav class="navbar fixed-bottom navbar-light bg-light">
+        <div class="container-fluid">
+          <span></span><span></span>
+          <button class="btn btn-outline-success" id="day" type="submit">ทำนาย</button>
+        </div>
+      </nav>
+    </footer>
 
     <script src="script.js"></script>
     <script src="hour.js"></script>
