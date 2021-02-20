@@ -54,25 +54,59 @@ def update_customer(storeId):
 
     return {'result': 'Updated successfully'}
 
-#ค่าเดียว
-# @app.route('/max', methods=['GET'])
-# def get_max():
+@app.route('/max', methods=['GET'])
+def get_max():
+    query = myCollection.find_one()
+    max_customer = {
+        "maxCustomer": query["maxCustomer"],
+    }
+    return max_customer
+    
+@app.route('/current', methods=['GET'])
+def get_current():
+    query = myCollection.find_one()
+    current = {
+        "currentCustomer": query["currentCustomer"],
+    }
+    return current
 
-# #ค่าเดียว
-# @app.route('/current', methods=['GET'])
-# def get_current():
+@app.route('/minute', methods=['GET'])
+def get_per_minute_this_hour():
+    query = myCollection.find_one()
+    five_minute = query["thisHourCumulativeCustomerEveryFiveMinutes"]
+    list_five = []
+    for i in five_minute:
+        list_five.append(i)
+    return json.dumps(list_five)
 
-# #ค่าเดียว
-# @app.route('/day', methods=['GET'])
-# def get_per_day():
 
-# #array
-# @app.route('/hour', methods=['GET'])
-# def get_per_hour():
+@app.route('/hour', methods=['GET'])
+def get_per_hour():
+    query = myCollection.find_one()
+    data = query['cumulativeCustomer']
+    list_day = []
+    list_hour =[]
+    for i in data:
+        list_day.append(i)
+    latest_date = list_day[-1]
+    del latest_date["timeStamp"]
+    for i in latest_date.values():
+        list_hour.append(i)
+    return json.dumps(list_hour[0])
 
-# #array
-# @app.route('/minute', methods=['GET'])
-# def get_per_five_minute_this_hour():
+@app.route('/day', methods=['GET'])
+def get_per_day():
+    query = myCollection.find_one()
+    data = query['cumulativeCustomer']
+    list_day = []
+    list_hour =[]
+    for i in data:
+        list_day.append(i)
+    latest_date = list_day[-1]
+    del latest_date["timeStamp"]
+    for i in latest_date.values():
+        list_hour.append(i)
+    return json.dumps(sum(list_hour[0]))
  
 # @app.route('/predict', methods=['GET'])
 # def predict():
