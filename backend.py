@@ -9,7 +9,7 @@ mongo = PyMongo(app)
 
 myCollection = mongo.db.nubwuttagum_store
 
-@app.route('/update_customer/<storeId>', methods=['GET'])
+@app.route('/update_customer/<storeId>', methods=['POST'])
 def update_customer(storeId):
     # get status (0/1) for (in/out)
     data = request.json
@@ -22,14 +22,20 @@ def update_customer(storeId):
 
     now = datetime.datetime.utcnow()-datetime.timedelta(hours=5)
     minute = now.minute
-    currentMinuteCustomer = query['thisHourCumulativeCustomerEveryFiveMinutes'][minute//5]
+    currentMinuteCustomer = query['thisHourCumulativeCustomerEveryFiveMinutes'][(minute//5)]
+    if currentCustomer == 0:
+        currentMinuteCustomer = query['thisHourCumulativeCustomerEveryFiveMinutes'][(minute//5)-1]
+
 
     hour = now.hour
+    currentHourCustomer = 0
     if (now.strftime("%x") != query['cumulativeCustomer'][-1]['timeStamp']) :
         added_day = {'$push': {'cumulativeCustomer': {'timeStamp': now.strftime("%x"), 'cumulativeCustomerPerHour': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}}
         myCollection.update_one(filt, added_day)
-
+    # for i in range(hour-1):
     currentHourCustomer = query['cumulativeCustomer'][-1]["cumulativeCustomerPerHour"][hour-1]
+    if currentHourCustomer == 0:
+        currentHourCustomer = query['cumulativeCustomer'][-1]["cumulativeCustomerPerHour"][hour-2]
 
     if (statusId == 0):
         currentCustomer -= 1
@@ -45,7 +51,7 @@ def update_customer(storeId):
         'thisHourCumulativeCustomerEveryFiveMinutes.' + str(minute//5): currentMinuteCustomer,
         }}
 
-    length = len(myCollection.find({'storeId':0})[0][cumulativeCustomer])
+    length = len(myCollection.find({'storeId':0})[0]['cumulativeCustomer'])
     myCollection.update_one(filt, updated_content)
     myCollection.update_one(
         filt, 
@@ -78,7 +84,6 @@ def get_per_minute_this_hour():
     for i in five_minute:
         list_five.append(i)
     return json.dumps(list_five)
-
 
 @app.route('/hour', methods=['GET'])
 def get_per_hour():
