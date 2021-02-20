@@ -1,9 +1,11 @@
 from flask import Flask, request
 from flask_pymongo import PyMongo
+from flask_cors import CORS, cross_origin
 import datetime
 import json
 
 app = Flask(__name__)
+cors = CORS(app, resources={r"/": {"origins": "*"}})
 app.config['MONGO_URI'] = 'mongodb://exceed_group08:r63tbmyq@158.108.182.0:2255/exceed_group08'
 mongo = PyMongo(app)
 
@@ -33,14 +35,12 @@ def update_customer(storeId):
         added_day = {'$push': {'cumulativeCustomer': {'timeStamp': now.strftime("%x"), 'cumulativeCustomerPerHour': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}}
         myCollection.update_one(filt, added_day)
     # for i in range(hour-1):
-    currentHourCustomer = query['cumulativeCustomer'][-1]["cumulativeCustomerPerHour"][hour-1]
+    currentHourCustomer = query['cumulativeCustomer'][-1]["cumulativeCustomerPerHour"][hour]
     if currentHourCustomer == 0:
-        currentHourCustomer = query['cumulativeCustomer'][-1]["cumulativeCustomerPerHour"][hour-2]
+        currentHourCustomer = query['cumulativeCustomer'][-1]["cumulativeCustomerPerHour"][hour-1]
 
     if (statusId == 0):
         currentCustomer -= 1
-        currentMinuteCustomer -= 1
-        currentHourCustomer -= 1
     else:
         currentCustomer += 1
         currentMinuteCustomer += 1
