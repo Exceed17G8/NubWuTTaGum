@@ -3,6 +3,9 @@ from flask_pymongo import PyMongo
 from flask_cors import CORS, cross_origin
 import datetime
 import json
+import numpy as np
+from sklearn.linear_model import LinearRegression
+import datetime
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/": {"origins": "*"}})
@@ -119,8 +122,61 @@ def get_per_day():
         list_hour.append(i)
     return json.dumps(sum(list_hour[0]))
  
-# @app.route('/predict', methods=['GET'])
-# def predict():
+@app.route('/predict_next_day/<storeId>', methods=['GET'])
+def predict_next_day(storeId):
+    # get store id
+    storeId = int(storeId)
+    filt = {'storeId': int(storeId)}
+
+    # query data from database
+    query = myCollection.find_one(filt)
+    cumulative = query['cumulativeCustomer']
+
+    # initial value
+    x = np.array([[0, 0]])
+    y = np.array([0])
+
+    # indicate test data
+    x_test = np.array([[0, 0]])
+    for i in range(24):
+        for j in range(7):
+            x_test = np.append(x_test, [[i, j]], axis=0)
+    x_test = x_test[1:]
+
+    # put the database's data into our dataset
+    for data in cumulative:
+        print(data['timeStamp'])
+        print(data['cumulativeCustomerPerHour'])
+
+        month, day, year = [int(i) for i in data['timeStamp'].split('/')]
+        d = datetime.datetime(year, month, day)
+        weekday = int(d.strftime('%w'))
+
+        for i in range(24):
+            x = np.append(x, [[weekday, i]], axis=0)
+            y = np.append(y, [data['cumulativeCustomerPerHour'][i]], axis=0)
+
+    x = x[1:]
+    y = y[1:]
+    print(x)
+    print(y)
+
+    # create model
+    model = LinearRegression()
+    model.fit(x, y)
+
+    # validate model
+    r_sq = model.score(x, y)
+    print('coefficient of determination:', r_sq)
+    print('intercept:', model.intercept_)
+    print('slope:', model.coef_)
+
+    # prediction
+    y_pred = model.predict(x_test)
+    print('predicted response:', y_pred, sep='\n')
+    print('predicted response:', len(y_pred), sep='\n')
+
+    return {'predictResult': json.dumps(y_pred.tolist())}
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port='3000', debug=True)
