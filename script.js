@@ -30,10 +30,8 @@ function update() {
 
     var customer = 1;
     var max_customer = 0;
-
     var max_url = "http://158.108.182.9:3000/max";
     var curr_url = "http://158.108.182.9:3000/current" 
-
     $.when(
         $.getJSON(max_url),
         $.getJSON(curr_url)

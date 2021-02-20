@@ -19,20 +19,22 @@
             <a class="navbar-brand" href="/">
               <img src="nubwattagum.png" style="width: 50px; height: 50px;" alt="logo">
             </a>
-            <h3 class="nav-item" id="time">จะเอ๋ตัวเอง!?</h3>
-            <h3 class="nav-item" id="day">ผมลุงแดงสอนกีตาร์</h3>
+            <h3 class="nav-item" id="time">nan ji?</h3>
+            <h3 class="nav-item" id="day">nan youbi?</h3>
         </div>
     </nav>
     <main class="w-100 h-100">
       <div class="bg-dark" id="customer-status" style="opacity: 72%;">
-        <h1 class="text-light text-center">จำนวนคนในร้านขณะนี้: <span id="amount-now">0</span>/<span id="amount-max">0</span></h1>
-        <h2 class="text-light text-center"><sup>Current customer(s)</sup></h2>
-        <h2 class="text-light text-center">จำนวนคนในร้านสะสมในวันนี้: <span id="amount-cum">0</span></h1>
-        <h3 class="text-light text-center"><sup>Today's cumulative customer(s)</sup></h3>
+        <h1 class="text-light text-center">Current customer(s): <span id="amount-now">0</span>/<span id="amount-max">0</span></h1>
+        <h2 class="text-light text-center">Today's cumulative customer(s): <span id="amount-cum">0</span></h1>
       </div>
-      <div class="position-fixed">
-        <canvas id="myChart" style="width: 500px; height: 300px; margin: 50px;padding: 10px; border: solid 0.5px grey; background-color: whitesmoke;"></canvas>
-        <canvas id="dayChart" style="width: 500px; height: 300px; margin: 50px;padding: 10px; border: solid 0.5px grey; background-color: whitesmoke;"></canvas>
+      <div class="d-flex justify-content-center">
+        <canvas id="myChart" style="width: 500px; height: 300px; margin-right: 50px; margin-top: 50px; padding: 10px; border: solid 0.5px grey; background-color: whitesmoke;"></canvas>
+        <canvas id="dayChart" style="width: 500px; height: 300px; margin-left: 50px; margin-top: 50px; padding: 10px; border: solid 0.5px grey; background-color: whitesmoke;"></canvas>
+      </div>
+      <div class="d-flex justify-content-center">
+        <h3 style="margin-right: 173px;">This hour's customers</h3>
+        <h3 style="margin-left: 173px;">Today's customers</h3>
       </div>
     </main>
     
