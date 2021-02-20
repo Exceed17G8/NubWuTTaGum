@@ -5,6 +5,7 @@ import datetime
 import json
 import numpy as np
 from sklearn.linear_model import LinearRegression
+import pytz
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/": {"origins": "*"}})
@@ -15,7 +16,7 @@ myCollection = mongo.db.nubwuttagum_store
 
 
 @app.route('/update_customer/<storeId>', methods=['POST'])
-@cross_origin
+@cross_origin()
 def update_customer(storeId):
     # get status (0/1) for (in/out)
     data = request.json
@@ -26,21 +27,23 @@ def update_customer(storeId):
     query = myCollection.find_one(filt)
     currentCustomer = query['currentCustomer']
 
-    now = datetime.datetime.utcnow()-datetime.timedelta(hours=5)
-    minute = now.minute
-    currentMinuteCustomer = query['thisHourCumulativeCustomerEveryFiveMinutes'][(
-        minute//5)]
-    if currentCustomer == 0:
-        currentMinuteCustomer = query['thisHourCumulativeCustomerEveryFiveMinutes'][(
-            minute//5)-1]
 
-    hour = now.hour
-    currentHourCustomer = 0
+    unconverted_now = datetime.datetime.now()
+    timezone = pytz.timezone("ETC/GMT+7")
+    now = timezone.localize(unconverted_now)
+    minute = now.minute
+    currentMinuteCustomerList = query['thisHourCumulativeCustomerEveryFiveMinutes']
+    currentMinuteCustomer = query['thisHourCumulativeCustomerEveryFiveMinutes'][(minute//5)]
+    if currentMinuteCustomer == 0:
+        currentMinuteCustomer = max(currentMinuteCustomerList)
+
+
+    hour = now.hour + 8
     if (now.strftime("%x") != query['cumulativeCustomer'][-1]['timeStamp']):
         added_day = {'$push': {'cumulativeCustomer': {'timeStamp': now.strftime("%x"), 'cumulativeCustomerPerHour': [
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}}}
         myCollection.update_one(filt, added_day)
-    # for i in range(hour-1):
+
     currentHourCustomer = query['cumulativeCustomer'][-1]["cumulativeCustomerPerHour"][hour]
     if currentHourCustomer == 0:
         currentHourCustomer = query['cumulativeCustomer'][-1]["cumulativeCustomerPerHour"][hour-1]
@@ -69,7 +72,7 @@ def update_customer(storeId):
 
 
 @app.route('/max', methods=['GET'])
-@cross_origin
+@cross_origin()
 def get_max():
     query = myCollection.find_one()
     max_customer = {
@@ -79,7 +82,7 @@ def get_max():
 
 
 @app.route('/current', methods=['GET'])
-@cross_origin
+@cross_origin()
 def get_current():
     query = myCollection.find_one()
     current = {
@@ -89,7 +92,7 @@ def get_current():
 
 
 @app.route('/minute', methods=['GET'])
-@cross_origin
+@cross_origin()
 def get_per_minute_this_hour():
     query = myCollection.find_one()
     five_minute = query["thisHourCumulativeCustomerEveryFiveMinutes"]
@@ -100,7 +103,7 @@ def get_per_minute_this_hour():
 
 
 @app.route('/hour', methods=['GET'])
-@cross_origin
+@cross_origin()
 def get_per_hour():
     query = myCollection.find_one()
     data = query['cumulativeCustomer']
@@ -116,7 +119,7 @@ def get_per_hour():
 
 
 @app.route('/day', methods=['GET'])
-@cross_origin
+@cross_origin()
 def get_per_day():
     query = myCollection.find_one()
     data = query['cumulativeCustomer']
@@ -132,6 +135,7 @@ def get_per_day():
 
 
 @app.route('/predict_customer/<storeId>', methods=['GET'])
+@cross_origin()
 def predict_customer(storeId):
     # get store id
     storeId = int(storeId)
