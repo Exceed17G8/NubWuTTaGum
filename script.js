@@ -1,6 +1,5 @@
 function update() {
     var date = new Date();
-
     var day = "";
     switch (date.getDay()) {
         case 0:

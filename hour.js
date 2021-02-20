@@ -1,6 +1,8 @@
 function update_graph_hour() {
   var ctx = document.getElementById("myChart").getContext("2d");
-  var hour = new Date().getHours();
+  var date = new Date();
+  var hour = date.getHours();
+  var minute = date.getMinutes();
   
   // http://158.108.182.9:3000/minute
   var hour_data = new Array(24);
@@ -15,7 +17,7 @@ function update_graph_hour() {
         pointStrokeColor: "#fff",
         pointHighlightFill: "#fff",
         pointHighlightStroke: "rgba(151,187,205,1)",
-        data: data
+        data: data.slice(0, Math.floor(minute/5)+1)
       }]
     };
     var options = {

@@ -1,6 +1,7 @@
 function update_prediction() {
     $.getJSON('http://158.108.182.9:3000/get_predict', function(data) {
-        var today = new Date().getDay();
+        var date = new Date();
+        var today = date.getDay();
         var prediction_value = data["customerDensity"][(today+1)%7]; // Next day
         var prediction_customer = data["dayAvg"][(today+1)%7] // Next day
         var prediction_content = `Tomorrow's average customer is ${Math.round(prediction_customer)} people. `;

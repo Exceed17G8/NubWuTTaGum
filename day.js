@@ -1,4 +1,6 @@
 function update_graph_day() {
+    var date = new Date();
+    var hour = date.getHours();
     var ctx2 = document.getElementById("dayChart").getContext("2d");
 
     var label_hours = [];
@@ -20,7 +22,7 @@ function update_graph_day() {
               pointStrokeColor: "#fff",
               pointHighlightFill: "#fff",
               pointHighlightStroke: "rgba(151,187,205,1)",
-              data: data
+              data: data.slice(0, hour+1)
             }]
           };
           var options = {
