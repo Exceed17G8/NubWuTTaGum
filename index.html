@@ -7,7 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href = "nubwattagum.png" rel="icon" type="image/gif">
     <title>NubWuTTaGum</title>
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bad+Script&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js" ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js" ></script>
     <script src="https://www.chartjs.org/samples/latest/utils.js" ></script>
@@ -19,35 +22,31 @@
             <a class="navbar-brand" href="/">
               <img src="nubwattagum.png" style="width: 50px; height: 50px;" alt="logo">
             </a>
-            <h3 class="nav-item" id="time">nan ji?</h3>
-            <h3 class="nav-item" id="day">nan youbi?</h3>
+            <h3 class="nav-item" style="font-family: 'Allan', cursive;" id="time">nan ji?</h3>
+            <h3 class="nav-item" style="font-family: 'Allan', cursive;" id="day">nan youbi?</h3>
         </div>
     </nav>
     <main class="w-100 h-100">
       <div class="bg-dark" id="customer-status" style="opacity: 72%;">
-        <h1 class="text-light text-center">Current customer(s): <span id="amount-now">0</span>/<span id="amount-max">0</span></h1>
-        <h2 class="text-light text-center">Today's cumulative customer(s): <span id="amount-cum">0</span></h1>
+        <h1 class="text-light text-center" style="font-family: 'Allan', cursive;">Current customer(s): <span id="amount-now">0</span>/<span id="amount-max">0</span></h1>
+        <h2 class="text-light text-center" style="font-family: 'Allan', cursive;">Today's cumulative customer(s): <span id="amount-cum">0</span></h1>
       </div>
       <div class="d-flex justify-content-center">
         <canvas id="myChart" style="width: 500px; height: 300px; margin-right: 50px; margin-top: 50px; padding: 10px; border: solid 0.5px grey; background-color: whitesmoke;"></canvas>
         <canvas id="dayChart" style="width: 500px; height: 300px; margin-left: 50px; margin-top: 50px; padding: 10px; border: solid 0.5px grey; background-color: whitesmoke;"></canvas>
       </div>
       <div class="d-flex justify-content-center">
-        <h3 style="margin-right: 100px;">This hour's cumulative customers</h3>
-        <h3 style="margin-left: 100px;">Today's cumulative customers</h3>
+        <h3 style="margin-right: 100px; margin-top: 24px; font-family: 'Allan', cursive;">Hour's cumulative customers</h3>
+        <h3 style="margin-left: 144px; margin-top: 24px; font-family: 'Allan', cursive;">Today's cumulative customers</h3>
       </div>
-    </main>
-    
-    <footer class="fixed-bottom">
       <nav class="navbar fixed-bottom navbar-light bg-transparent">
         <div class="container-fluid">
-          <span></span><span></span><span></span>
-          <button type="button" id="predict" class="btn btn-light btn-outline-success" data-bs-container="body" data-bs-toggle="popover" title="Prediction" data-bs-placement="top" data-bs-content="Predick!">
-            PREDICT
-          </button>
+          <span></span>
+            <h2 class="text-center" style="font-family: 'Allan', cursive;">"<span id="predict"></span>"</h2>
+          <span></span>
         </div>
       </nav>
-    </footer>
+    </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
     <script>
