@@ -4,7 +4,7 @@ from flask_cors import CORS, cross_origin
 import datetime
 import json
 import numpy as np
-#from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LinearRegression
 import pytz
 
 app = Flask(__name__)
@@ -187,82 +187,82 @@ def get_predict():
     data = query['predictResult']
     return json.dumps(data)
 
-# @app.route('/predict_customer/<storeId>', methods=['GET'])
-# @cross_origin()
-# def predict_customer(storeId):
-#     # get store id
-#     storeId = int(storeId)
-#     filt = {'storeId': int(storeId)}
+@app.route('/predict_customer/<storeId>', methods=['GET'])
+@cross_origin()
+def predict_customer(storeId):
+    # get store id
+    storeId = int(storeId)
+    filt = {'storeId': int(storeId)}
 
-#     # query data from database
-#     query = myCollection.find_one(filt)
-#     cumulative = query['cumulativeCustomer']
-#     maxCustomer = query['maxCustomer']
+    # query data from database
+    query = myCollection.find_one(filt)
+    cumulative = query['cumulativeCustomer']
+    maxCustomer = query['maxCustomer']
 
-#     # initial value
-#     x = np.array([[0, 0]])  # dayId 0-6, dayHour 0-23
-#     y = np.array([0])  # expected cumulative number
-#     firstDayInDatabase = -1
+    # initial value
+    x = np.array([[0, 0]])  # dayId 0-6, dayHour 0-23
+    y = np.array([0])  # expected cumulative number
+    firstDayInDatabase = -1
 
-#     # indicate test data
-#     x_test = np.array([[0, 0]])
-#     for i in range(24):
-#         for j in range(7):
-#             x_test = np.append(x_test, [[i, j]], axis=0)
-#     x_test = x_test[1:]
+    # indicate test data
+    x_test = np.array([[0, 0]])
+    for i in range(24):
+        for j in range(7):
+            x_test = np.append(x_test, [[i, j]], axis=0)
+    x_test = x_test[1:]
 
-#     # put the database's data into our dataset
-#     for data in cumulative:
-#         month, day, year = [int(i) for i in data['timeStamp'].split('/')]
-#         d = datetime.datetime(year, month, day)
-#         weekday = int(d.strftime('%w'))
-#         if (firstDayInDatabase == -1):
-#             firstDayInDatabase = weekday
+    # put the database's data into our dataset
+    for data in cumulative:
+        month, day, year = [int(i) for i in data['timeStamp'].split('/')]
+        d = datetime.datetime(year, month, day)
+        weekday = int(d.strftime('%w'))
+        if (firstDayInDatabase == -1):
+            firstDayInDatabase = weekday
 
-#         for i in range(24):
-#             x = np.append(x, [[weekday, i]], axis=0)
-#             cumulative = data['cumulativeCustomerPerHour'][i]
-#             y = np.append(y, [cumulative], axis=0)
+        for i in range(24):
+            x = np.append(x, [[weekday, i]], axis=0)
+            cumulative = data['cumulativeCustomerPerHour'][i]
+            y = np.append(y, [cumulative], axis=0)
 
-#     x = x[1:]
-#     y = y[1:]
+    x = x[1:]
+    y = y[1:]
 
-#     # create model
-#     model = LinearRegression()
-#     model.fit(x, y)
+    # create model
+    model = LinearRegression()
+    model.fit(x, y)
 
-#     # validate model
-#     r_sq = model.score(x, y)
-#     print('coefficient of determination:', r_sq)
-#     print('intercept:', model.intercept_)
-#     print('slope:', model.coef_)
+    # validate model
+    r_sq = model.score(x, y)
+    print('coefficient of determination:', r_sq)
+    print('intercept:', model.intercept_)
+    print('slope:', model.coef_)
 
-#     # prediction
-#     y_pred = [i if i > 0 else 0 for i in model.predict(x_test)]
-#     print('predicted response:', y_pred, sep='\n')
+    # prediction
+    y_pred = [i if i > 0 else 0 for i in model.predict(x_test)]
+    print('predicted response:', y_pred, sep='\n')
 
-#     # get average customer in each day a week
-#     dayAverage = []
-#     for i in range(0, len(y_pred), 24):
-#         sumValue = sum(y_pred[i:i+24])
-#         dayAverage.append(sumValue/24)
-#     dayAverage = shift(dayAverage, firstDayInDatabase)
+    # get average customer in each day a week
+    dayAverage = []
+    for i in range(0, len(y_pred), 24):
+        sumValue = sum(y_pred[i:i+24])
+        dayAverage.append(sumValue/24)
+    dayAverage = shift(dayAverage, firstDayInDatabase)
 
-#     # get customer density in each day a week
-#     customerDensity = []
-#     for elem in dayAverage:
-#         customerDensity.append(elem/maxCustomer)
+    # get customer density in each day a week
+    customerDensity = []
+    for elem in dayAverage:
+        customerDensity.append(elem/maxCustomer)
 
-#     # get customer density today
-#     day = int(datetime.datetime.today().strftime('%w'))
-#     customerDensityToday = customerDensity[day]
+    # get customer density today
+    day = int(datetime.datetime.today().strftime('%w'))
+    customerDensityToday = customerDensity[day]
 
-#     return {'predictResult': json.dumps(dayAverage), 'customerDensity': json.dumps(customerDensity), 'customerDensityToday': customerDensityToday}
+    return {'predictResult': json.dumps(dayAverage), 'customerDensity': json.dumps(customerDensity), 'customerDensityToday': customerDensityToday}
 
 
-# def shift(seq, n=0):
-#     a = n % len(seq)
-#     return seq[-a:] + seq[:-a]
+def shift(seq, n=0):
+    a = n % len(seq)
+    return seq[-a:] + seq[:-a]
 
 
 if __name__ == "__main__":
